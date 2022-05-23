@@ -3,47 +3,43 @@ var __webpack_exports__ = {};
 /*!************************!*\
   !*** ./src/js/main.js ***!
   \************************/
-const tabcontent = document.querySelectorAll('.tabcontent'),
-      tabHeaderItems = document.querySelectorAll('.tabheader__items'),
-      tabHeaderItem = document.querySelectorAll('.tabheader__item');
+window.addEventListener('DOMContentLoaded', () => {
+  const tabsContent = document.querySelectorAll('.tabcontent'),
+        tabsParent = document.querySelector('.tabheader__items'),
+        tabs = document.querySelectorAll('.tabheader__item');
 
-function contentHide(content, item) {
-  content.forEach(element => {
-    element.style.display = 'none';
-  });
-  item.forEach((element, i) => {
-    if (element.innerHTML == 'Фитнес') {
-      content[i].style.display = 'block';
-    } else {
-      element.classList.remove('tabheader__item_active');
+  function hideTabContent() {
+    tabsContent.forEach(item => {
+      item.classList.add('hide');
+      item.classList.remove('show', 'fade');
+    });
+    tabs.forEach(item => {
+      item.classList.remove('tabheader__item_active');
+    });
+  }
+
+  function showTabContent() {
+    let i = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    tabsContent[i].classList.add('show', 'fade');
+    tabsContent[i].classList.remove('hide');
+    tabs[i].classList.add('tabheader__item_active');
+  }
+
+  hideTabContent();
+  showTabContent();
+  tabsParent.addEventListener('click', event => {
+    const target = event.target;
+
+    if (target && target.classList.contains('tabheader__item')) {
+      tabs.forEach((item, i) => {
+        if (target == item) {
+          hideTabContent();
+          showTabContent(i);
+        }
+      });
     }
   });
-}
-
-function tabsClicking(content, item) {
-  item.forEach((element, i) => {
-    element.addEventListener('click', e => {
-      e.preventDefault();
-      console.log(element);
-
-      for (let index of content) {
-        index.style.display = 'none';
-        console.log(element.classList);
-      }
-
-      for (let index of item) {
-        index.classList.remove('tabheader__item_active');
-      }
-
-      element.classList.add('tabheader__item_active');
-      content[i].style.display = 'block';
-      console.log(element);
-    });
-  });
-}
-
-contentHide(tabcontent, tabHeaderItem);
-tabsClicking(tabcontent, tabHeaderItem);
+});
 /******/ })()
 ;
 //# sourceMappingURL=script.js.map
