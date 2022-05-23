@@ -112,4 +112,12 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     });
 
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
+            modal.classList.add('hide');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+    });
+
 });
