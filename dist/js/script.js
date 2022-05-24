@@ -153,6 +153,12 @@ window.addEventListener('DOMContentLoaded', () => {
       this.content = content;
       this.price = price;
       this.name = name;
+
+      for (var _len = arguments.length, classes = new Array(_len > 6 ? _len - 6 : 0), _key = 6; _key < _len; _key++) {
+        classes[_key - 6] = arguments[_key];
+      }
+
+      this.classes = classes;
       this.parent = document.querySelector(parentSelector);
       this.transfer = 27;
       this.changeToUAH();
@@ -164,8 +170,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
     render() {
       const element = document.createElement('div');
+
+      if (this.classes.length === 0) {
+        this.element = 'menu__item';
+        element.classList.add(this.element);
+      } else {
+        this.classes.forEach(className => element.classList.add(className));
+      }
+
       element.innerHTML = `
-            <div class="menu__item">
                 <img src=${this.img} alt=${this.name}>
                 <h3 class="menu__item-subtitle">${this.title}</h3>
                 <div class="menu__item-descr">${this.content}</div>
@@ -174,7 +187,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     <div class="menu__item-cost">Цена:</div>
                     <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
                 </div>
-            </div>
             `;
       this.parent.append(element);
     }
