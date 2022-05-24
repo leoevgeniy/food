@@ -111,7 +111,86 @@ window.addEventListener('DOMContentLoaded', () => {
       modal.classList.remove('show');
       document.body.style.overflow = '';
     }
-  });
+  }); // Cards
+  // function addCard(menuCard) {
+  //     const menu = document.querySelector('.menu .container'),
+  //       item = document.createElement('div'),
+  //       image = document.createElement('img'),
+  //       h3 = document.createElement('h3'),
+  //       descr = document.createElement('div'),
+  //       divider = document.createElement('div'),
+  //       price = document.createElement('div'),
+  //       cost = document.createElement('div'),
+  //       total = document.createElement('div'),
+  //       totalSpan = document.createElement('span');
+  // item.classList.add('menu__item');
+  // menu.appendChild(item);
+  // image.src = menuCard.img;
+  // image.alt = menuCard.name;
+  // item.appendChild(image);
+  // h3.classList.add('menu__item-subtitle');
+  // h3.innerHTML = menuCard.title;
+  // item.appendChild(h3);
+  // descr.classList.add('menu__item-descr');
+  // descr.innerHTML = menuCard.content;
+  // item.appendChild(descr);
+  // divider.classList.add('menu__item-divider');
+  // item.appendChild(divider);
+  // price.classList.add('menu__item-price');
+  // item.appendChild(price);
+  // cost.classList.add('menu__item-cost');
+  // cost.innerHTML = 'Цена:';
+  // price.appendChild(cost);
+  // total.classList.add('menu__item-total');
+  // price.appendChild(total);
+  // total.innerHTML = `<span>${menuCard.price}</span> гре/день`;
+  // }
+
+  class menuCard {
+    constructor(name, img, title, content, price, parentSelector) {
+      this.img = `${img}`;
+      this.title = title;
+      this.content = content;
+      this.price = price;
+      this.name = name;
+      this.parent = document.querySelector(parentSelector);
+      this.transfer = 27;
+      this.changeToUAH();
+    }
+
+    changeToUAH() {
+      this.price = this.price * this.transfer;
+    }
+
+    render() {
+      const element = document.createElement('div');
+      element.innerHTML = `
+            <div class="menu__item">
+                <img src=${this.img} alt=${this.name}>
+                <h3 class="menu__item-subtitle">${this.title}</h3>
+                <div class="menu__item-descr">${this.content}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                </div>
+            </div>
+            `;
+      this.parent.append(element);
+    }
+
+  } // const fitness = new menuCard('vegy', 'img/tabs/vegy.jpg', 'Меню"Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 229);
+  // const elite = new menuCard('vegy', 'img/tabs/elite.jpg', 'Меню"Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 229);
+  // const post = new menuCard('vegy', 'img/tabs/post.jpg', 'Меню"Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 229);
+  // addCard(fitness);
+  // addCard(elite);
+  // addCard(elite);
+  // addCard(post);
+  // addCard(post);
+
+
+  new menuCard('vegy', 'img/tabs/vegy.jpg', 'Меню"Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 100, '.menu .container').render();
+  new menuCard('vegy', 'img/tabs/vegy.jpg', 'Меню"Фитнес"', 'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!', 100, '.menu .container').render();
 });
 /******/ })()
 ;
