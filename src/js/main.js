@@ -161,12 +161,12 @@ window.addEventListener('DOMContentLoaded', () => {
     // }
 
     class menuCard {
-        constructor(name, img, title, content, price, parentSelector, ...classes) {
-            this.img = `${img}`;
+        constructor(altimg, img, title, descr, price, parentSelector, ...classes) {
+            this.img = img;
             this.title = title;
-            this.content = content;
+            this.descr = descr;
             this.price = price;
-            this.name = name;
+            this.altimg = altimg;
             this.classes = classes;
             this.parent = document.querySelector(parentSelector);
             this.transfer = 27;
@@ -187,9 +187,9 @@ window.addEventListener('DOMContentLoaded', () => {
             }
             
             element.innerHTML = `
-                <img src=${this.img} alt=${this.name}>
+                <img src=${this.img} alt=${this.altimg}>
                 <h3 class="menu__item-subtitle">${this.title}</h3>
-                <div class="menu__item-descr">${this.content}</div>
+                <div class="menu__item-descr">${this.descr}</div>
                 <div class="menu__item-divider"></div>
                 <div class="menu__item-price">
                     <div class="menu__item-cost">Цена:</div>
@@ -213,25 +213,71 @@ window.addEventListener('DOMContentLoaded', () => {
     // addCard(elite);
     // addCard(post);
     // addCard(post);
+    const getResource = async (url) => {
+        const res = await fetch(url);
+        
+        if (!res.ok) {
+           throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+        }
+
+        return await res.json();
+    };
     
-    new menuCard(
-        'vegy',
-        'img/tabs/vegy.jpg',
-        'Меню"Фитнес"',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-        100,
-        '.menu .container'
+    // getResource('http://localhost:3000/menu')
+    // .then(data => {
+    //     data.forEach(({altimg, img, title, descr, price}) => {
+    //         new menuCard(altimg, img, title, descr, price, '.menu .container').render();
+    //     });
+    // });
 
-    ).render();
-    new menuCard(
-        'vegy',
-        'img/tabs/vegy.jpg',
-        'Меню"Фитнес"',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-        100,
-        '.menu .container'
+    // getResource('http://localhost:3000/menu')
+    //     .then(data => createCard(data));
 
-    ).render();
+
+    axios.get('http://localhost:3000/menu')
+        .then(data => {
+                data.data.forEach(({altimg, img, title, descr, price}) => {
+                    new menuCard(altimg, img, title, descr, price, '.menu .container').render();
+                });
+        });
+
+    // function createCard(data) {
+    //     data.forEach(({altimg, img, title, descr, price}) => {
+    //         const element = document.createElement('div');
+
+    //         element.classList.add('menu__item');
+    //         element.innerHTML = `
+    //             <img src=${img} alt=${altimg}>
+    //             <h3 class="menu__item-subtitle">${title}</h3>
+    //             <div class="menu__item-descr">${descr}</div>
+    //             <div class="menu__item-divider"></div>
+    //             <div class="menu__item-price">
+    //                 <div class="menu__item-cost">Цена:</div>
+    //                 <div class="menu__item-total"><span>${price}</span> грн/день</div>
+    //             </div>
+    //         `;
+
+    //         document.querySelector('.menu .container').append(element);
+    //     });
+    // }
+    // new menuCard(
+    //     'vegy',
+    //     'img/tabs/vegy.jpg',
+    //     'Меню"Фитнес"',
+    //     'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+    //     100,
+    //     '.menu .container'
+
+    // ).render();
+    // new menuCard(
+    //     'vegy',
+    //     'img/tabs/vegy.jpg',
+    //     'Меню"Фитнес"',
+    //     'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+    //     100,
+    //     '.menu .container'
+
+    // ).render();
 
     //Forms
     
@@ -243,10 +289,23 @@ window.addEventListener('DOMContentLoaded', () => {
           };
     
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     });
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: data
+        });
+
+        return await res.json();
+    };
+
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -262,19 +321,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
             const formData = new FormData(form);
 
-            const object = {};
-            formData.forEach(function(value, key) {
-                object[key] = value;
-            });
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            fetch('server.php', {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(object)
-            })
-            .then(data => data.text())
+             postData('http://localhost:3000/requests', json)
             .then(data => {
                 console.log(data);
                 showThanksModal(message.success);  
@@ -312,14 +361,8 @@ window.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     }
 
-    // fetch('https://jsonplaceholder.typicode.com/posts', {
-    //     method: "POST",
-    //     body: JSON.stringify({name: 'Alex'}),
-    //     headers: {
-    //         'Content-type': 'application/json'
-    //     }
-    // })
-    //     .then(response => response.json())
-    //     .then(json => console.log(json));
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(res => console.log(res));
 
 });
