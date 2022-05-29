@@ -1,26 +1,65 @@
-function modal() {
-    function showThanksModal(message) {
-        const prevModalDialog = document.querySelector('.modal__dialog');
-        prevModalDialog.classList.add('hide');
-        openModal();
+function openModal() {
+    const modal = document.querySelector('.modal');
+    modal.classList.add('show');
+    modal.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
+}
 
-        const thanksModal = document.createElement('div');
-        thanksModal.classList.add('modal__dialog');
-        thanksModal.innerHTML = `
-            <div class="modal__content">
-                <div class="modal__close" data-close>&times;</div>
-                <div class="modal__title">${message}</div>
-            </div>
-        `;
 
-        document.querySelector('.modal').append(thanksModal);
-        setTimeout(() => {
-            thanksModal.remove();
-            prevModalDialog.classList.add('show');
-            prevModalDialog.classList.remove('hide');
-            closeModal();
-        }, 4000);
-    }
+
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+}
+function showThanksModal(message) {
+    const prevModalDialog = document.querySelector('.modal__dialog');
+    prevModalDialog.classList.add('hide');
+    openModal();
+
+    const thanksModal = document.createElement('div');
+    thanksModal.classList.add('modal__dialog');
+    thanksModal.innerHTML = `
+        <div class="modal__content">
+            <div class="modal__close" data-close>&times;</div>
+            <div class="modal__title">${message}</div>
+        </div>
+    `;
+
+    document.querySelector('.modal').append(thanksModal);
+    setTimeout(() => {
+        thanksModal.remove();
+        prevModalDialog.classList.add('show');
+        prevModalDialog.classList.remove('hide');
+        closeModal();
+    }, 4000);
+}
+function modalpart() {
+
+       //Modal
+
+       const modalbtn = document.querySelectorAll('[data-modal]'),
+       modal = document.querySelector('.modal');
+
+
+    modalbtn.forEach(item => {
+        item.addEventListener('click', openModal);
+    });
+
+   modal.addEventListener('click', (e) => {
+       if (e.target === modal || e.target.getAttribute('data-close') == '') {
+           closeModal();
+       }
+   });
+
+   document.addEventListener('keydown', (e) => {
+       if (e.code === 'Escape' && modal.classList.contains('show')) {
+           modal.classList.add('hide');
+           modal.classList.remove('show');
+           document.body.style.overflow = '';
+       }
+   });
         //Tabs
     
 
@@ -230,4 +269,7 @@ function modal() {
 
     
 }
-module.exports = modal;
+export default modalpart;
+export {openModal};
+export {closeModal};
+export {showThanksModal};

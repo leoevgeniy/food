@@ -1,3 +1,13 @@
+function closeModal() {
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+}
+function openModal() {
+    modal.classList.add('show');
+    modal.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
+}
 function timer() {
 //Timer
 
@@ -56,21 +66,13 @@ function timer() {
     const modalbtn = document.querySelectorAll('[data-modal]'),
         modal = document.querySelector('.modal');
 
-    function openModal() {
-        modal.classList.add('show');
-        modal.classList.remove('hide');
-        document.body.style.overflow = 'hidden';
-    }
+
 
     modalbtn.forEach(item => {
         item.addEventListener('click', openModal);
     });
 
-    function closeModal() {
-        modal.classList.add('hide');
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    }
+
 
     modal.addEventListener('click', (e) => {
         if (e.target === modal || e.target.getAttribute('data-close') == '') {
@@ -88,4 +90,6 @@ function timer() {
 
 }
 
-module.exports = timer;
+export default timer;
+export {openModal};
+export {closeModal};
